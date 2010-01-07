@@ -28,7 +28,7 @@ public class DocumentFormat {
     private String extension;
     private String mediaType;
     private DocumentFamily inputFamily;
-    private Map<String,?> loadProperties;
+    private Map<String, ?> loadProperties;
     private Map<DocumentFamily,Map<String,?>> storePropertiesByFamily;
 
     public DocumentFormat() {
@@ -77,7 +77,7 @@ public class DocumentFormat {
         return loadProperties;
     }
 
-    public void setLoadProperties(Map<String,?> loadProperties) {
+    public void setLoadProperties(Map<String,Object> loadProperties) {
         this.loadProperties = loadProperties;
     }
 
@@ -96,7 +96,7 @@ public class DocumentFormat {
         storePropertiesByFamily.put(family, storeProperties);
     }
 
-    public Map<String,?> getStoreProperties(DocumentFamily family) {
+    public Map<String, ?> getStoreProperties(DocumentFamily family) {
         if (storePropertiesByFamily == null) {
             return null;
         }

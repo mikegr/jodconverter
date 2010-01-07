@@ -64,7 +64,7 @@ public class JsonDocumentFormatRegistry extends SimpleDocumentFormatRegistry {
         }
     }
 
-    private Map<String,?> toJavaMap(JSONObject jsonMap) throws JSONException {
+    private Map<String,Object> toJavaMap(JSONObject jsonMap) throws JSONException {
         Map<String,Object> map = new HashMap<String,Object>();
         for (String key : JSONObject.getNames(jsonMap)) {
             Object value = jsonMap.get(key);

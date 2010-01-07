@@ -19,19 +19,25 @@
 //
 package org.artofsolving.jodconverter.document;
 
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.uno.Any;
+
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.HashMap;
 
 public class DefaultDocumentFormatRegistry extends SimpleDocumentFormatRegistry {
 
 	public DefaultDocumentFormatRegistry() {
+        System.out.println("Setting PDF/A");
+
 		DocumentFormat pdf = new DocumentFormat("Portable Document Format", "pdf", "application/pdf");
-		pdf.setStoreProperties(DocumentFamily.TEXT, Collections.singletonMap("FilterName", "writer_pdf_Export"));
-		pdf.setStoreProperties(DocumentFamily.SPREADSHEET, Collections.singletonMap("FilterName", "calc_pdf_Export"));
-		pdf.setStoreProperties(DocumentFamily.PRESENTATION, Collections.singletonMap("FilterName", "impress_pdf_Export"));
-		pdf.setStoreProperties(DocumentFamily.DRAWING, Collections.singletonMap("FilterName", "draw_pdf_Export"));
-		addFormat(pdf);
+        pdf.setStoreProperties(DocumentFamily.TEXT, createPdfType("writer_pdf_Export"));
+        pdf.setStoreProperties(DocumentFamily.SPREADSHEET, createPdfType( "calc_pdf_Export"));
+		pdf.setStoreProperties(DocumentFamily.PRESENTATION, createPdfType("impress_pdf_Export"));
+		pdf.setStoreProperties(DocumentFamily.DRAWING, createPdfType("draw_pdf_Export"));
+        addFormat(pdf);
 		
 		DocumentFormat swf = new DocumentFormat("Macromedia Flash", "swf", "application/x-shockwave-flash");
 		swf.setStoreProperties(DocumentFamily.PRESENTATION, Collections.singletonMap("FilterName", "impress_flash_Export"));
@@ -161,4 +167,16 @@ public class DefaultDocumentFormatRegistry extends SimpleDocumentFormatRegistry 
         addFormat(svg);
   	}
 
+    private Map<String, Object> createPdfType(String pdfExportType) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("FilterName", pdfExportType);
+
+        PropertyValue[] aFilterData = new PropertyValue[1];
+        aFilterData[0] = new PropertyValue();
+        aFilterData[0].Name = "SelectPdfVersion";
+        aFilterData[0].Value = 1;
+        map.put("FilterData", aFilterData);
+        return map;
+    }
+    
 }

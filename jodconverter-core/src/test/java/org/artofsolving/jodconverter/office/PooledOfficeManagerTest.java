@@ -88,7 +88,7 @@ public class PooledOfficeManagerTest {
                 }
             }
         }.start();
-        Thread.sleep(500);
+        Thread.sleep(1000);
         Process underlyingProcess = (Process) ReflectionUtils.getPrivateField(process, "process");
         assertNotNull(underlyingProcess);
         underlyingProcess.destroy();  // simulate crash
