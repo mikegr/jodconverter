@@ -29,14 +29,14 @@ import java.util.HashMap;
 
 public class DefaultDocumentFormatRegistry extends SimpleDocumentFormatRegistry {
 
-	public DefaultDocumentFormatRegistry() {
+	public DefaultDocumentFormatRegistry(boolean enablePdfAByDefault) {
         System.out.println("Setting PDF/A");
 
 		DocumentFormat pdf = new DocumentFormat("Portable Document Format", "pdf", "application/pdf");
-        pdf.setStoreProperties(DocumentFamily.TEXT, createPdfType("writer_pdf_Export"));
-        pdf.setStoreProperties(DocumentFamily.SPREADSHEET, createPdfType( "calc_pdf_Export"));
-		pdf.setStoreProperties(DocumentFamily.PRESENTATION, createPdfType("impress_pdf_Export"));
-		pdf.setStoreProperties(DocumentFamily.DRAWING, createPdfType("draw_pdf_Export"));
+        pdf.setStoreProperties(DocumentFamily.TEXT, createPdfType(enablePdfAByDefault, "writer_pdf_Export"));
+        pdf.setStoreProperties(DocumentFamily.SPREADSHEET, createPdfType(enablePdfAByDefault, "calc_pdf_Export"));
+		pdf.setStoreProperties(DocumentFamily.PRESENTATION, createPdfType(enablePdfAByDefault, "impress_pdf_Export"));
+		pdf.setStoreProperties(DocumentFamily.DRAWING, createPdfType(enablePdfAByDefault, "draw_pdf_Export"));
         addFormat(pdf);
 		
 		DocumentFormat swf = new DocumentFormat("Macromedia Flash", "swf", "application/x-shockwave-flash");
@@ -167,16 +167,17 @@ public class DefaultDocumentFormatRegistry extends SimpleDocumentFormatRegistry 
         addFormat(svg);
   	}
 
-    private Map<String, Object> createPdfType(String pdfExportType) {
+    private Map<String, Object> createPdfType(boolean pdfA, String pdfExportType) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("FilterName", pdfExportType);
-
-        PropertyValue[] aFilterData = new PropertyValue[1];
-        aFilterData[0] = new PropertyValue();
-        aFilterData[0].Name = "SelectPdfVersion";
-        aFilterData[0].Value = 1;
-        map.put("FilterData", aFilterData);
+        if (pdfA) {
+            PropertyValue[] aFilterData = new PropertyValue[1];
+            aFilterData[0] = new PropertyValue();
+            aFilterData[0].Name = "SelectPdfVersion";
+            aFilterData[0].Value = 1;
+            map.put("FilterData", aFilterData);
+        }
         return map;
     }
-    
+
 }
